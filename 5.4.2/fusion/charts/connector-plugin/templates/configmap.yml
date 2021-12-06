@@ -183,6 +183,8 @@ data:
                 allowPrivilegeEscalation: false
                 privileged: false
               volumeMounts:
+                - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+                  mountPath: "/connector-data"
                 - name: application-config-k8s
                   mountPath: "app/config"
                   readOnly: true
@@ -228,6 +230,8 @@ data:
                   value: "{{ include "fusion.connector-plugin.kubeNamespace" . }}"
                 - name: "PULSAR_SERVICE_URL"
                   value: "{{ include "fusion.connector-plugin.pulsarServiceUrl" . }}"
+                - name: CONNECTORS_PERSISTENT_STORE
+                  value: "/connector-data"
 
               ports:
                 - containerPort: {{ .Values.port.external }}
@@ -284,6 +288,9 @@ data:
                     path: hazelcast.yml
             - name: heap-dumps
               emptyDir: {}
+            - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+              persistentVolumeClaim:
+                claimName: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
     {{- if ( and $importTrustedCertsEnabled ( not $tlsEnabled )) }}
             - name: truststore
               emptyDir: {}

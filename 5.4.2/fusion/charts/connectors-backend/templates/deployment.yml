@@ -91,6 +91,8 @@ spec:
             - name: "keystore-volume"
               mountPath: "/etc/ssl/keystores"
             {{- end }}
+            - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+              mountPath: "/connector-data"
           args:
             - "--pulsar.admin-url={{ include "fusion.connectors-backend.pulsarAdminUrl" . }}"
             - "--pulsar.service-url={{ include "fusion.connectors-backend.pulsarServiceUrl" . }}"
@@ -113,6 +115,8 @@ spec:
               value: "{{ include "fusion.connectors-backend.kubeNamespace" . }}"
             - name: "PULSAR_SERVICE_URL"
               value: "{{ include "fusion.connectors-backend.pulsarServiceUrl" . }}"
+            - name: CONNECTORS_PERSISTENT_STORE
+              value: "/connector-data"
           ports:
             - containerPort: {{ .Values.port.mainService.external }}
               name: main-service
@@ -177,6 +181,9 @@ spec:
                 path: application-k8s.yml
         - name: heap-dumps
           emptyDir: {}
+        - name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
+          persistentVolumeClaim:
+            claimName: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
 {{- if $tlsEnabled }}
 {{ $params := dict "tlsServiceName" ( include "fusion.connectors-backend.serviceName" . ) "Release" .Release "global" .Values.global "tls" .Values.tls  "keytoolUtils" .Values.keytoolUtils }}
 {{ include "fusion.tls.volumes" $params | indent 8 }}

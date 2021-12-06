@@ -721,8 +721,8 @@ connector-plugin:
     imagePullSecrets: []
     name: connector-plugin
     pullPolicy: IfNotPresent
-    repository: lucidworks
-    tag: 5.4.2
+    repository: gcr.io/lw-support-team
+    tag: 5.4.x-hotfix-2012-12-06-01
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=40.0 -Xss256k
     -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
   keytoolUtils:
@@ -934,8 +934,8 @@ connectors-backend:
     imagePullSecrets: []
     name: connectors-backend
     pullPolicy: IfNotPresent
-    repository: lucidworks
-    tag: 5.4.2
+    repository: gcr.io/lw-support-team
+    tag: 5.4.x-hotfix-2012-12-06-01
   javaToolOptions: -XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=40.0 -XX:MaxRAMPercentage=75.0
     -Xss256k -Dhttp.maxConnections=1000 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps
   keytoolUtils:
@@ -1024,6 +1024,9 @@ connectors-backend:
   zkPort: 2181
   zkReplicaCount: 3
   zkTLSPort: 2281
+  storage:
+      requests: 10Gi
+      storageClassName: ""
 devops-ui:
   affinity: {}
   autoscaling:
