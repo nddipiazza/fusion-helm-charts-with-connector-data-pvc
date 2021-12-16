@@ -6,7 +6,7 @@ metadata:
   name: {{ template "fusion.connectors-backend.fullname" . }}-connector-data
 spec:
   accessModes:
-    ReadWriteMany
+  - ReadWriteMany
   volumeMode: "Filesystem"
   resources:
     requests:
